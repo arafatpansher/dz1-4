@@ -1,34 +1,27 @@
 const modal = document.querySelector(".modal");
-const modalClose = document.querySelector(".modal_close");
-const modalBtns = document.querySelectorAll("#btn-get");
+const btnOpen = document.querySelector("#btn-get");
+const btnClose = document.querySelector(".modal_close");
 
-function openModal() {
-  modal.classList.add("show");
-  modal.classList.remove("hide");
+const openModal = () => {
+  modal.style.display = "block";
   document.body.style.overflow = "hidden";
-}
+};
 
-function closeModal() {
-  modal.classList.add("hide");
-  modal.classList.remove("show");
+const closeModal = () => {
+  modal.style.display = "none";
   document.body.style.overflow = "";
-}
+};
 
-modalBtns.forEach((btn) => btn.addEventListener("click", openModal));
-modalClose.addEventListener("click", closeModal);
+btnOpen.addEventListener("click", () => {
+  openModal();
+});
 
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) {
+btnClose.addEventListener("click", () => {
+  closeModal();
+});
+
+modal.addEventListener("click", (event) => {
+  if (event.target == modal) {
     closeModal();
   }
 });
-
-function showModalByScroll() {
-  if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 1) {
-    openModal();
-    window.removeEventListener("scroll", showModalByScroll);
-  }
-}
-window.addEventListener("scroll", showModalByScroll);
-
-setTimeout(openModal, 10000);

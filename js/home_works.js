@@ -19,20 +19,79 @@ gmailButton.addEventListener("click", () => {
 const parentBlock = document.querySelector(".parent_block");
 const childBlock = document.querySelector(".child_block");
 
-let position = 0;
+let x = 0;
+let y = 0;
+let direction = "right";
 const parentWidth = parentBlock.offsetWidth;
+const parentHeight = parentBlock.offsetHeight;
 const childWidth = childBlock.offsetWidth;
+const childHeight = childBlock.offsetHeight;
 
 function moveBlock() {
-  if (position < parentWidth - childWidth) {
-    position++;
-    childBlock.style.left = `${position}px`;
-    requestAnimationFrame(moveBlock);
+  if (direction === "right") {
+    if (x < parentWidth - childWidth) {
+      x++;
+    } else {
+      direction = "down";
+    }
+  } else if (direction === "down") {
+    if (y < parentHeight - childHeight) {
+      y++;
+    } else {
+      direction = "left";
+    }
+  } else if (direction === "left") {
+    if (x > 0) {
+      x--;
+    } else {
+      direction = "up";
+    }
+  } else if (direction === "up") {
+    if (y > 0) {
+      y--;
+    } else {
+      direction = "right";
+    }
   }
+
+  childBlock.style.left = `${x}px`;
+  childBlock.style.top = `${y}px`;
+
+  requestAnimationFrame(moveBlock);
 }
 
-childBlock.style.position = "relative";
 childBlock.addEventListener("click", () => {
-  position = 0;
+  x = 0;
+  y = 0;
+  direction = "right";
   moveBlock();
+});
+
+const startBtn = document.getElementById("start");
+const stopBtn = document.getElementById("stop");
+const resetBtn = document.getElementById("reset");
+const secondsDisplay = document.getElementById("seconds");
+
+let seconds = 0;
+let timer = null;
+
+startBtn.addEventListener("click", () => {
+  if (timer !== null) return;
+
+  timer = setInterval(() => {
+    seconds++;
+    secondsDisplay.textContent = seconds;
+  }, 1000);
+});
+
+stopBtn.addEventListener("click", () => {
+  clearInterval(timer);
+  timer = null;
+});
+
+resetBtn.addEventListener("click", () => {
+  clearInterval(timer);
+  timer = null;
+  seconds = 0;
+  secondsDisplay.textContent = seconds;
 });
